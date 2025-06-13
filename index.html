@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>洗碗碟机速算工具</title>
+    <style>
+        /* 全局样式 */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* 容器样式 */
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #50b3a2;
+            margin-bottom: 1.5rem;
+        }
+
+        /* 分割线样式 */
+        .section-header {
+            font-weight: bold;
+            color: #50b3a2;
+            margin: 1rem 0 1rem 0; /* 调整此处：标题上下边距统一 */
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        /* 增大“电改气经济性分析”的字体大小并调整位置 */
+        .section-header.economic-analysis {
+            font-size: 1.5em; /* 增大字体大小 */
+            margin-top: -1rem; /* 上移标题 */
+        }
+
+        /* 小字体并加粗 */
+        .small-bold-text {
+            font-size: 0.9em; /* 设置较小字体大小 */
+            font-weight: bold; /* 保持加粗 */
+        }
+
+        /* 输入组样式 */
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        .input-group input:focus {
+            border-color: #50b3a2;
+            outline: none;
+        }
+
+        /* 按钮样式 */
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #50b3a2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #3a8c7d;
+        }
+
+        /* 结果样式 */
+        .result-section {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .result-section p {
+            margin: 0.5rem 0;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .result-section p.small-bold-text {
+            font-size: 0.9em; /* 设置较小字体大小 */
+            font-weight: bold; /* 保持加粗 */
+        }
+
+        .result-section span {
+            color: #50b3a2;
+        }
+
+        /* 双列布局 */
+        .dual-column {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .left-column, .right-column {
+            flex: 1;
+            padding: 0 1rem;
+            text-align: left;
+        }
+
+        /* 建议样式 */
+        .suggestion {
+            margin-top: 1rem;
+            text-align: center;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .suggestion span {
+            color: #50b3a2;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 600px) {
+            .container {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .dual-column {
+                flex-direction: column;
+            }
+
+            .left-column, .right-column {
+                width: 100%;
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>洗碗碟机速算工具</h1>
+        <div class="input-group">
+            <label for="gas-price">燃气价格（元/m³）:</label>
+            <input type="number" id="gas-price" step="0.01">
+        </div>
+        <div class="input-group">
+            <label for="electricity-price">电价（元/kWh）:</label>
+            <input type="number" id="electricity-price" step="0.01">
+        </div>
+        <div class="input-group">
+            <label for="powerTotal">洗碗碟机总功率（kW）:</label>
+            <input type="number" id="powerTotal" step="0.01">
+        </div>
+        <div class="input-group">
+            <label for="powerHeater">洗碗碟机热水器功率（kW）:</label>
+            <input type="number" id="powerHeater" step="0.01" placeholder="若未知洗碗碟机热水器功率，可按总功率70%估算">
+        </div>
+        <div class="input-group">
+            <label for="powerDry">洗碗碟机烘干模块及输送带功率（kW）:</label>
+            <input type="number" id="powerDry" step="0.01" placeholder="若未知烘干模块及输送带功率，可按总功率30%估算">
+        </div>
+  <div class="input-group">
+            <label for="waterusage">用水量（吨/小时）:</label>
+            <input type="number" id="waterusage" step="0.01">
+        </div>
+        <div class="input-group">
+            <label for="daily-hours">洗碗碟机日使用时长（小时）:</label>
+            <input type="number" id="daily-hours" step="0.01">
+        </div>
+        <div class="input-group">
+            <label for="annual-days">洗碗碟机年使用天数（天/年）:</label>
+            <input type="number" id="annual-days" step="1">
+        </div>
+        <div class="input-group">
+            <label for="cost">改造成本（￥）:</label>
+            <input type="number" id="cost" step="1">
+        </div>
+<div class="input-group">
+            <label for="discount">折扣百分率（%）:</label>
+            <input type="number" id="discount" step="1">
+        </div>
+
+        <button onclick="calculate()">计算</button>
+
+        <!-- 双列布局 -->
+        <div class="dual-column">
+            <!-- 改造前电洗碗碟机用能分析 -->
+            <div class="left-column result-section">
+                <div class="section-header">改造前电洗碗碟机用能分析</div>
+                <p class="small-bold-text">改造前用电费用: <span id="oldelectricityCost"></span> ￥/年</p>
+                <p class="small-bold-text">年用水量: <span id="annualwaterusage"></span> 吨/年</p>
+            </div>
+
+            <!-- 改造后燃气洗碗碟机用能分析 - 已删除新增气量、燃气费用和用电费用 -->
+            <div class="right-column result-section">
+                <div class="section-header">改造后燃气洗碗碟机用能分析</div>
+                <p class="small-bold-text">折扣后年费用: <span id="incomeafterdiscount"></span> ￥/年</p>
+                <p class="small-bold-text">年节省费用: <span id="annualsaving"></span> ￥/年</p>
+            </div>
+        </div>
+
+        <!-- 建议部分 -->
+        <div class="suggestion">
+            <p>建议: <span id="suggestion"></span></p>
+        </div>
+    </div>
+
+    <script>
+        function calculate() {
+            const gasPrice = parseFloat(document.getElementById('gas-price').value);
+            const electricityPrice = parseFloat(document.getElementById('electricity-price').value);
+            const waterusage = parseFloat(document.getElementById('waterusage').value);
+            const powerTotal = parseFloat(document.getElementById('powerTotal').value);
+            const discount = parseFloat(document.getElementById('discount').value);
+            let powerDryValue = parseFloat(document.getElementById('powerDry').value);
+            if (isNaN(powerDryValue)) {
+                powerDryValue = powerTotal * 0; // 默认值为总功率的30%(现在改成0%了)
+            }
+            const powerDry = powerDryValue;
+            const dailyHours = parseFloat(document.getElementById('daily-hours').value);
+            const annualDays = parseFloat(document.getElementById('annual-days').value);
+            const cost = parseFloat(document.getElementById('cost').value);
+
+
+            const oldelectricityCost = powerTotal * dailyHours * annualDays / 1 * electricityPrice;
+            const incomeafterdiscount = discount / 100 * oldelectricityCost;
+            const annualsaving = incomeafterdiscount - oldelectricityCost;
+            const annualwaterusage = waterusage * dailyHours * annualDays;
+            const savings = oldelectricityCost - ((powerTotal - powerDry) * dailyHours * annualDays * gasPrice * 3.6 / 36 / 0.88) - (powerDry * dailyHours * annualDays / 1 * electricityPrice);
+            const payback = (cost / savings) * 12;
+
+            document.getElementById('oldelectricityCost').textContent = oldelectricityCost.toFixed(2);
+            document.getElementById('annualwaterusage').textContent = annualwaterusage.toFixed(2);
+            document.getElementById('incomeafterdiscount').textContent = incomeafterdiscount.toFixed(2);
+            document.getElementById('annualsaving').textContent = annualsaving.toFixed(2);
+
+            const suggestion = payback < 18 ? "任何一方均可投资" : "由客户投资";
+            document.getElementById('suggestion').textContent = suggestion;
+        }
+    </script>
+</body>
+</html>
